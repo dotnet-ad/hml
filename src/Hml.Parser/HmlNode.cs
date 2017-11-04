@@ -22,6 +22,10 @@ namespace Hml.Parser
 
         public string Text { get; set; }
 
+        public int Line { get; set; }
+
+        public int Column { get; set; }
+
         public IDictionary<string, string> Properties { get; } = new Dictionary<string, string>();
 
         public string this[string name]

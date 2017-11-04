@@ -15,7 +15,7 @@ node(property="value", other="another value"): this is the content
 ```
 
 ```csharp
-var node = HmlParser.Global.Parse(hmlContent);
+var node = HmlParser.Default.Parse(hmlContent);
 var other = node["other"]; //another value
 var child = node.First(); 
 var text = child.Text; //content of the child

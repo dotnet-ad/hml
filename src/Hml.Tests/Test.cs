@@ -165,6 +165,31 @@ namespace Hml.Tests
             Assert.IsEmpty(child2);
         }
 
+        [Test]
+        public void Parse_EmptyLines_Succeed()
+        {
+            var hml = @"
+test
+
+
+    child
+
+
+";
+            var root = this.parser.Parse(hml);
+
+            Assert.IsNotNull(root);
+            Assert.AreEqual("test", root.Name);
+            Assert.IsNullOrEmpty(root.Text);
+            Assert.IsEmpty(root.Properties);
+
+            Assert.IsNotEmpty(root);
+            var child = root.First();
+            Assert.AreEqual("child", child.Name);
+            Assert.IsNullOrEmpty(child.Text);
+            Assert.IsEmpty(child.Properties);
+        }
+
         #endregion
 
         // TODO parse exception

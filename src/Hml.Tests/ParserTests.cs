@@ -4,7 +4,7 @@ using System.Linq;
 namespace Hml.Tests
 {
     [TestFixture()]
-    public class Test
+    public class ParserTests
     {
         private HmlParser parser;
 
@@ -195,16 +195,14 @@ test
         {
             var hml = @"test(prop1=""propv1"", prop2=""propv2""): great sample!
   child(cp=""v""): child text";
-            var root = this.parser.Parse(hml);
+            
+            var root = this.parser.Parse(hml).Root;
+            Assert.AreEqual(0, root.Position.Line);
+            Assert.AreEqual(0, root.Position.Column);
 
-            Assert.AreEqual(0, root.Root.Line);
-            Assert.AreEqual(0, root.Root.Column);
-
-            var child = root.Root.First();
-            Assert.AreEqual(1, child.Line);
-            Assert.AreEqual(2, child.Column);
-
-
+            var child = root.First();
+            Assert.AreEqual(1, child.Position.Line);
+            Assert.AreEqual(2, child.Position.Column);
         }
 
         #endregion

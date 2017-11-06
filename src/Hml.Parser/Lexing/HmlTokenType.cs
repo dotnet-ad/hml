@@ -1,9 +1,10 @@
-﻿namespace Hml.Parser
+﻿namespace Hml.Parser.Lexing
 {
     public enum HmlTokenType : byte
     {
         Unknown,
         Whitespaces,
+        Indent,
         Identifier,
         PropertiesStart,
         PropertiesEnd,

@@ -6,25 +6,26 @@ namespace Hml.Parser
 {
     public class HmlNode : IEnumerable<HmlNode>
     {
-        public HmlNode(int indent, string name)
+        public HmlNode(int indent, string name, string text, IDictionary<string,string> properties, Position position)
         {
             this.Indent = indent;
+            this.Text = text;
             this.Name = name;
+            this.Position = position;
+            this.Properties = properties ?? new Dictionary<string, string>();
         }
 
         private List<HmlNode> children = new List<HmlNode>();
 
         public HmlNode Parent { get; private set; }
 
-        public int Indent { get; set; }
+        public int Indent { get; }
 
-        public string Name { get; set; }
+        public string Name { get; }
 
-        public string Text { get; set; }
+        public string Text { get; }
 
-        public int Line { get; set; }
-
-        public int Column { get; set; }
+        public Position Position { get; }
 
         public IDictionary<string, string> Properties { get; } = new Dictionary<string, string>();
 

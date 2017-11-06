@@ -2,11 +2,20 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Diagnostics;
 
-namespace Hml.Parser
+namespace Hml.Parser.Lexing
 {
     public class HmlLexer
     {
+        #region Default
+
+        private static readonly Lazy<HmlLexer> instance;
+
+        public static HmlLexer Default => instance.Value;
+
+        #endregion
+
         public HmlToken[] Tokenize(string content)
         {
             using (MemoryStream stream = new MemoryStream())
@@ -28,9 +37,13 @@ namespace Hml.Parser
 
         private StreamReader reader;
 
+        private int position, line, column;
+
         public void Tokenize(Stream stream, Action<HmlToken> onToken)
         {
             this.position = 0;
+            this.line = 0;
+            this.column = 0;
 
             using(this.reader = new StreamReader(stream))
             {
@@ -40,18 +53,18 @@ namespace Hml.Parser
                 {
                     token = ProcessToken();
                     onToken(token);
+                    Debug.WriteLine($"[Lexer]({token.Type})({token.Position.Line},{token.Position.Column}) : {token.Content}");
                 }
             }
         }
-
-        private int position;
 
         private char? Read() 
         {
             if (reader.EndOfStream)
                 return null;
 
-            position++;
+            this.position++;
+            this.column++;
             return (char)reader.Read();
         }
 
@@ -69,12 +82,13 @@ namespace Hml.Parser
         private HmlToken ProcessToken()
         {
             var start = this.position;
+            var column = this.column;
 
             var currentOrEnd = this.Read();
 
             if(currentOrEnd == null)
             {
-                return new HmlToken(HmlTokenType.EndOfDocument, start, start, null);
+                return new HmlToken(HmlTokenType.EndOfDocument,this.line, this.column, start, start, null);
             }
 
             HmlTokenType type;
@@ -113,7 +127,13 @@ namespace Hml.Parser
                     break;
                 case '\n':
                 case '\r':
-                    type =  HmlTokenType.LineReturn;
+                    if (current == '\r' && this.Peek() == '\n')
+                    {
+                        this.Read();
+                    }
+                    type = HmlTokenType.LineReturn;
+                    this.line++;
+                    this.column = 0;
                     break;
                 case '=':
                     type =  HmlTokenType.Equals;
@@ -159,7 +179,7 @@ namespace Hml.Parser
 
             var end = this.position;
 
-            return new HmlToken(type, start, end - start, content);
+            return new HmlToken(type, this.line, column, start, end - start, content);
         }
     }
 }

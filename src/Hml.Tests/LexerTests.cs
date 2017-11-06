@@ -1,7 +1,5 @@
-﻿using System;
-using NUnit.Framework;
-using Hml.Parser;
-using System.Linq;
+﻿using NUnit.Framework;
+using Hml.Parser.Lexing;
 
 namespace Hml.Tests
 {
@@ -32,8 +30,8 @@ namespace Hml.Tests
 
             Assert.AreEqual(HmlTokenType.Identifier, tokens[0].Type);
             Assert.AreEqual("node.test", tokens[0].Content);
-            Assert.AreEqual(0, tokens[0].Start);
-            Assert.AreEqual(9, tokens[0].Length);
+            Assert.AreEqual(0, tokens[0].Position.Start);
+            Assert.AreEqual(9, tokens[0].Position.Length);
 
             Assert.AreEqual(HmlTokenType.Whitespaces, tokens[1].Type);
 

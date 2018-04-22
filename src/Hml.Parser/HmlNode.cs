@@ -129,6 +129,21 @@ namespace Hml.Parser
         public IEnumerable<HmlNode> Children(string name) => this.Where(x => x.Name == name);
 
         /// <summary>
+        /// Gets the property value, or null if not found.
+        /// </summary>
+        /// <returns>The found property, else null.</returns>
+        /// <param name="name">The property name.</param>
+        public string Property(string name) 
+        {
+            if(this.Properties.TryGetValue(name, out string value))
+            {
+                return value;
+            }
+
+            return null;
+        }
+
+        /// <summary>
         /// Gets the enumerator.
         /// </summary>
         /// <returns>The enumerator.</returns>

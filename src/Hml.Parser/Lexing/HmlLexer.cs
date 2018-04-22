@@ -130,6 +130,7 @@ namespace Hml.Parser.Lexing
             {
                 case var letter when char.IsLetter(current):
                 case '_':
+                case '@':
                     type = HmlTokenType.Identifier;
                     var idBuilder = new StringBuilder();
                     idBuilder.Append(current);

@@ -29,9 +29,9 @@ namespace Hml.Tests
             var root = this.parser.Parse(hml);
 
             Assert.IsNotNull(root);
-            Assert.AreEqual("test", root.Name);
-            Assert.IsNullOrEmpty(root.Text);
-            Assert.IsEmpty(root.Properties);
+            Assert.AreEqual("test", root.Root.Name);
+            Assert.IsNullOrEmpty(root.Root.Text);
+            Assert.IsEmpty(root.Root.Properties);
         }
 
         [Test]
@@ -41,9 +41,9 @@ namespace Hml.Tests
             var root = this.parser.Parse(hml);
 
             Assert.IsNotNull(root);
-            Assert.AreEqual("test", root.Name);
-            Assert.IsEmpty(root.Properties);
-            Assert.AreEqual("great sample!", root.Text);
+            Assert.AreEqual("test", root.Root.Name);
+            Assert.IsEmpty(root.Root.Properties);
+            Assert.AreEqual("great sample!", root.Root.Text);
         }
 
         [Test]
@@ -53,9 +53,9 @@ namespace Hml.Tests
             var root = this.parser.Parse(hml);
 
             Assert.IsNotNull(root);
-            Assert.AreEqual("test", root.Name);
-            Assert.IsNotEmpty(root.Properties);
-            Assert.AreEqual("propv", root["prop"]);
+            Assert.AreEqual("test", root.Root.Name);
+            Assert.IsNotEmpty(root.Root.Properties);
+            Assert.AreEqual("propv", root.Root["prop"]);
         }
 
         [Test]
@@ -65,10 +65,10 @@ namespace Hml.Tests
             var root = this.parser.Parse(hml);
 
             Assert.IsNotNull(root);
-            Assert.AreEqual("test", root.Name);
-            Assert.IsNotEmpty(root.Properties);
-            Assert.AreEqual("propv1", root["prop1"]);
-            Assert.AreEqual("propv2", root["prop2"]);
+            Assert.AreEqual("test", root.Root.Name);
+            Assert.IsNotEmpty(root.Root.Properties);
+            Assert.AreEqual("propv1", root.Root["prop1"]);
+            Assert.AreEqual("propv2", root.Root["prop2"]);
         }
 
         [Test]
@@ -78,11 +78,11 @@ namespace Hml.Tests
             var root = this.parser.Parse(hml);
 
             Assert.IsNotNull(root);
-            Assert.AreEqual("test", root.Name);
-            Assert.IsNotEmpty(root.Properties);
-            Assert.AreEqual("propv1", root["prop1"]);
-            Assert.AreEqual("propv2", root["prop2"]);
-            Assert.AreEqual("great sample!", root.Text);
+            Assert.AreEqual("test", root.Root.Name);
+            Assert.IsNotEmpty(root.Root.Properties);
+            Assert.AreEqual("propv1", root.Root["prop1"]);
+            Assert.AreEqual("propv2", root.Root["prop2"]);
+            Assert.AreEqual("great sample!", root.Root.Text);
         }
 
         [Test]
@@ -92,11 +92,11 @@ namespace Hml.Tests
             var root = this.parser.Parse(hml);
 
             Assert.IsNotNull(root);
-            Assert.AreEqual("test", root.Name);
-            Assert.IsNotEmpty(root.Properties);
-            Assert.AreEqual("propv1", root["prop1"]);
-            Assert.AreEqual("propv2", root["prop2"]);
-            Assert.AreEqual("great sample!", root.Text);
+            Assert.AreEqual("test", root.Root.Name);
+            Assert.IsNotEmpty(root.Root.Properties);
+            Assert.AreEqual("propv1", root.Root["prop1"]);
+            Assert.AreEqual("propv2", root.Root["prop2"]);
+            Assert.AreEqual("great sample!", root.Root.Text);
         }
 
         #endregion
@@ -111,14 +111,14 @@ namespace Hml.Tests
             var root = this.parser.Parse(hml);
 
             Assert.IsNotNull(root);
-            Assert.AreEqual("test", root.Name);
-            Assert.IsNotEmpty(root.Properties);
-            Assert.AreEqual("propv1", root["prop1"]);
-            Assert.AreEqual("propv2", root["prop2"]);
-            Assert.AreEqual("great sample!", root.Text);
+            Assert.AreEqual("test", root.Root.Name);
+            Assert.IsNotEmpty(root.Root.Properties);
+            Assert.AreEqual("propv1", root.Root["prop1"]);
+            Assert.AreEqual("propv2", root.Root["prop2"]);
+            Assert.AreEqual("great sample!", root.Root.Text);
 
-            Assert.IsNotEmpty(root);
-            var child = root.First();
+            Assert.IsNotEmpty(root.Root);
+            var child = root.Root.First();
             Assert.AreEqual("child", child.Name);
             Assert.IsNotEmpty(child.Properties);
             Assert.AreEqual("v", child["cp"]);
@@ -135,14 +135,14 @@ namespace Hml.Tests
             var root = this.parser.Parse(hml);
 
             Assert.IsNotNull(root);
-            Assert.AreEqual("test", root.Name);
-            Assert.IsNotEmpty(root.Properties);
-            Assert.AreEqual("propv1", root["prop1"]);
-            Assert.AreEqual("propv2", root["prop2"]);
-            Assert.AreEqual("great sample!", root.Text);
+            Assert.AreEqual("test", root.Root.Name);
+            Assert.IsNotEmpty(root.Root.Properties);
+            Assert.AreEqual("propv1", root.Root["prop1"]);
+            Assert.AreEqual("propv2", root.Root["prop2"]);
+            Assert.AreEqual("great sample!", root.Root.Text);
 
-            Assert.IsNotEmpty(root);
-            var child1 = root.First();
+            Assert.IsNotEmpty(root.Root);
+            var child1 = root.Root.First();
             Assert.AreEqual("child1", child1.Name);
             Assert.IsNotEmpty(child1.Properties);
             Assert.AreEqual("v1", child1["cp"]);
@@ -156,8 +156,8 @@ namespace Hml.Tests
             Assert.AreEqual("child11 text", child11.Text);
             Assert.IsEmpty(child11);
 
-            Assert.IsTrue(root.Count() > 1);
-            var child2 = root.ElementAt(1);
+            Assert.IsTrue(root.Root.Count() > 1);
+            var child2 = root.Root.ElementAt(1);
             Assert.AreEqual("child2", child2.Name);
             Assert.IsNotEmpty(child2.Properties);
             Assert.AreEqual("v2", child2["cp"]);
@@ -179,12 +179,12 @@ test
             var root = this.parser.Parse(hml);
 
             Assert.IsNotNull(root);
-            Assert.AreEqual("test", root.Name);
-            Assert.IsNullOrEmpty(root.Text);
-            Assert.IsEmpty(root.Properties);
+            Assert.AreEqual("test", root.Root.Name);
+            Assert.IsNullOrEmpty(root.Root.Text);
+            Assert.IsEmpty(root.Root.Properties);
 
-            Assert.IsNotEmpty(root);
-            var child = root.First();
+            Assert.IsNotEmpty(root.Root);
+            var child = root.Root.First();
             Assert.AreEqual("child", child.Name);
             Assert.IsNullOrEmpty(child.Text);
             Assert.IsEmpty(child.Properties);
@@ -197,10 +197,10 @@ test
   child(cp=""v""): child text";
             var root = this.parser.Parse(hml);
 
-            Assert.AreEqual(0, root.Line);
-            Assert.AreEqual(0, root.Column);
+            Assert.AreEqual(0, root.Root.Line);
+            Assert.AreEqual(0, root.Root.Column);
 
-            var child = root.First();
+            var child = root.Root.First();
             Assert.AreEqual(1, child.Line);
             Assert.AreEqual(2, child.Column);
 

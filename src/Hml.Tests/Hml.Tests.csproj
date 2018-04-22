@@ -33,6 +33,7 @@
   <ItemGroup>
     <Compile Include="Test.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="LexerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

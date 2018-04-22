@@ -14,6 +14,14 @@ node(property="value", other="another value"): this is the content
   child3(prop="v3"): another content
 ```
 
+```
+var node = HmlParser.Global.Parse(hmlContent);
+var other = node["other"]; //another value
+var child = node.First(); 
+var text = child.Text; //content of the child
+
+```
+
 ## Specification
 
 A `.hml` describe a tree where each node has a name,  set of properties (with a name and a string value), a value (string), a list of descendants.

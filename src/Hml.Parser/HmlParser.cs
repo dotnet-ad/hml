@@ -84,8 +84,14 @@ namespace Hml.Parser
                 return null;
             }
 
+            var nodeLine = this.line;
+            var nodeColumn = this.column;
             var name = this.ReadName();
-            var node = new HmlNode(indent,name);
+            var node = new HmlNode(indent,name)
+            {
+                Line = nodeLine,
+                Column = nodeColumn,
+            };
 
             this.SkipWhitespaces();
             

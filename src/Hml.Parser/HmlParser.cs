@@ -23,6 +23,8 @@ namespace Hml.Parser
 
         private StreamReader reader;
 
+        private static readonly char[] NameAuthorizedSpecialChars = { '_', '.', '-' };
+
         #endregion
 
         #region Public methods
@@ -49,15 +51,18 @@ namespace Hml.Parser
                 {
                     var node = this.ReadNode();
 
-                    HmlNode parent = null;
-
-                    while (stack.Count > 0 && (parent = stack.First()).Indent >= node.Indent)
+                    if(node != null)
                     {
-                        parent = stack.Pop();
-                    }
+                        HmlNode parent = null;
 
-                    parent?.Add(node);
-                    stack.Push(node);
+                        while (stack.Count > 0 && (parent = stack.First()).Indent >= node.Indent)
+                        {
+                            parent = stack.Pop();
+                        }
+
+                        parent?.Add(node);
+                        stack.Push(node);
+                    }
                 }
             }
 
@@ -73,6 +78,11 @@ namespace Hml.Parser
         private HmlNode ReadNode()
         {
             var indent = this.ReadChars(' ');
+
+            if(this.TryReadNewLine())
+            {
+                return null;
+            }
 
             var name = this.ReadName();
             var node = new HmlNode(indent,name);
@@ -133,7 +143,7 @@ namespace Hml.Parser
                     if (this.TryReadChar(')'))
                         break;
 
-                    this.Assert(this.TryReadChar(','), "expected character ')' or ','");
+                    this.Assert(this.TryReadChar(','), "expected character ')' or ','", true);
                 }
                 return true;
             }
@@ -161,10 +171,10 @@ namespace Hml.Parser
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void Assert(bool condition, string message) 
+        private void Assert(bool condition, string message, bool isPeeked = false) 
         {
             if(!condition)
-                throw new ParsingException(this.line, this.column, message);
+                throw new ParsingException(this.line, this.column + (isPeeked ? 1 : 0), message);
         }
 
         private bool TryReadChar(char c)
@@ -182,25 +192,34 @@ namespace Hml.Parser
 
         private bool TryReadNewLine()
         {
+            var result = false;
+
             if(this.TryReadChar('\n'))
             {
-                return true;
+                result = true;
             }
-
-            if (this.TryReadChar('\r'))
+            else if (this.TryReadChar('\r'))
             {
                 this.TryReadChar('\n');
-                return true;
+                result = true;
             }
 
-            return false;
+            if(result)
+            {
+                column = 0;
+                line++;
+            }
+
+            return result;
         }
 
         private char Peek() => (char)reader.Peek();
 
-        private char Read() => (char)reader.Read();
-
-        private static readonly char[] NameAuthorizedSpecialChars = { '_', '.', '-' };
+        private char Read() 
+        {
+            column++;
+            return (char)reader.Read();
+        }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private string ReadName()
@@ -211,7 +230,7 @@ namespace Hml.Parser
 
             var c = this.Peek();
 
-            this.Assert(char.IsLetter(c) || c == '_', "names must begin with a letter or '_'");
+            this.Assert(char.IsLetter(c) || c == '_', "names must begin with a letter or '_'", true);
 
             builder.Append(this.Read());
 
@@ -232,7 +251,7 @@ namespace Hml.Parser
 
             this.EnsureNotEnd();
 
-            this.Assert(this.TryReadChar('='), "expected character '=' for setting property value");
+            this.Assert(this.TryReadChar('='), "expected character '=' for setting property value", true);
 
             this.SkipWhitespaces();
 
@@ -248,7 +267,7 @@ namespace Hml.Parser
 
             this.EnsureNotEnd();
 
-            this.Assert(this.TryReadChar('"'), "expected character '\"' for starting a property value");
+            this.Assert(this.TryReadChar('"'), "expected character '\"' for starting a property value", true);
 
             char c;
             while (EnsureNotEnd() && (c = this.Read()) != '"')

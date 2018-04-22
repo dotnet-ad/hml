@@ -190,6 +190,23 @@ test
             Assert.IsEmpty(child.Properties);
         }
 
+        [Test]
+        public void Parse_OneLevelNodes_LineAndColumns()
+        {
+            var hml = @"test(prop1=""propv1"", prop2=""propv2""): great sample!
+  child(cp=""v""): child text";
+            var root = this.parser.Parse(hml);
+
+            Assert.AreEqual(0, root.Line);
+            Assert.AreEqual(0, root.Column);
+
+            var child = root.First();
+            Assert.AreEqual(1, child.Line);
+            Assert.AreEqual(2, child.Column);
+
+
+        }
+
         #endregion
 
         // TODO parse exception

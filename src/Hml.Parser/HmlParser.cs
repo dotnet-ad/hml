@@ -43,6 +43,9 @@ namespace Hml.Parser
 
         public HmlNode Parse(Stream stream)
         {
+            this.line = 0;
+            this.column = 0;
+
             var stack = new Stack<HmlNode>();
 
             using (this.reader = new StreamReader(stream))
@@ -167,10 +170,9 @@ namespace Hml.Parser
         private int ReadChars(params char[] c)
         {
             var count = 0;
-            char c1;
-            while (!reader.EndOfStream && c.Contains(c1 = (char)reader.Peek()))
+            while (!reader.EndOfStream && c.Contains(this.Peek()))
             {
-                reader.Read();
+                this.Read();
                 count++;
             }
             return count;
@@ -223,7 +225,7 @@ namespace Hml.Parser
 
         private char Read() 
         {
-            column++;
+            this.column++;
             return (char)reader.Read();
         }
 

@@ -119,7 +119,7 @@ namespace Hml.Parser
         /// </summary>
         /// <returns>The found child, else null.</returns>
         /// <param name="name">The node name.</param>
-        public HmlNode Child(string name) => this.First(x => x.Name == name);
+        public HmlNode Child(string name) => this.FirstOrDefault(x => x.Name == name);
 
         /// <summary>
         /// Gets all the direct children with the specified name.

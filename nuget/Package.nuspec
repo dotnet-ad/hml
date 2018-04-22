@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+   <metadata minClientVersion="2.8.1">
+        <id>Hml</id>
+        <version>$version$</version>
+        <title>HML (Hierarchy Markup Language)</title>
+        <authors>Aloïs DENIEL</authors>
+        <owners>Aloïs DENIEL</owners>
+        <licenseUrl>https://github.com/aloisdeniel/Hml/blob/master/LICENSE</licenseUrl>
+        <projectUrl>https://github.com/aloisdeniel/Hml/</projectUrl>
+        <iconUrl>https://raw.githubusercontent.com/aloisdeniel/Hml/master/doc/logo.png</iconUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <summary>Parser for the HML language.</summary>
+        <description>Parser for the HML language.</description>
+        <tags>hml, markup, language</tags>
+   </metadata>
+   <files>
+     <!-- PCL -->
+     <file src="..\src\Hml.Parser\bin\Release\netstandard1.0\Hml.Parser.dll" target="lib\netstandard1.0" />
+   </files>
+</package>

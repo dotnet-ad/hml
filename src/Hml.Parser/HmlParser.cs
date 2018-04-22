@@ -7,11 +7,15 @@ using Hml.Parser.Exceptions;
 
 namespace Hml.Parser
 {
+
+    /// <summary>
+    /// A parser for the hml language.
+    /// </summary>
     public class HmlParser
     {
         #region Default
 
-        private static readonly Lazy<HmlParser> instance;
+        private static readonly Lazy<HmlParser> instance = new Lazy<HmlParser>(() => new HmlParser());
 
         public static HmlParser Default => instance.Value;
 
@@ -39,10 +43,19 @@ namespace Hml.Parser
 
         private Position position;
 
+        private List<HmlToken> tokens;
+
+        private Stack<HmlNode> stack;
+
         #endregion
 
         #region Public methods
 
+        /// <summary>
+        /// Parse the specified content.
+        /// </summary>
+        /// <returns>The parse.</returns>
+        /// <param name="content">Content.</param>
         public HmlDocument Parse(string content)
         {
             using(MemoryStream stream = new MemoryStream())
@@ -55,10 +68,11 @@ namespace Hml.Parser
             }
         }
 
-        private List<HmlToken> tokens;
-
-        private Stack<HmlNode> stack;
-
+        /// <summary>
+        /// Parse the specified stream.
+        /// </summary>
+        /// <returns>The parse.</returns>
+        /// <param name="stream">Stream.</param>
         public HmlDocument Parse(Stream stream)
         {
             this.tokens = new List<HmlToken>();

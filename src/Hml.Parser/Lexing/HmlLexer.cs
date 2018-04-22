@@ -6,16 +6,38 @@ using System.Diagnostics;
 
 namespace Hml.Parser.Lexing
 {
+    /// <summary>
+    /// A lexer for hml language.
+    /// </summary>
     public class HmlLexer
     {
         #region Default
 
-        private static readonly Lazy<HmlLexer> instance;
-
+        /// <summary>
+        /// Gets a default lexer.
+        /// </summary>
+        /// <value>The default.</value>
         public static HmlLexer Default => instance.Value;
+
+        private static readonly Lazy<HmlLexer> instance;
 
         #endregion
 
+        #region Fields
+
+        private StreamReader reader;
+
+        private int position, line, column;
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Tokenize the specified content.
+        /// </summary>
+        /// <returns>The tokenize.</returns>
+        /// <param name="content">Content.</param>
         public HmlToken[] Tokenize(string content)
         {
             using (MemoryStream stream = new MemoryStream())
@@ -28,6 +50,11 @@ namespace Hml.Parser.Lexing
             }
         }
 
+        /// <summary>
+        /// Tokenize the specified stream.
+        /// </summary>
+        /// <returns>The tokenize.</returns>
+        /// <param name="stream">Stream.</param>
         public HmlToken[] Tokenize(Stream stream)
         {
             var result = new List<HmlToken>();
@@ -35,17 +62,19 @@ namespace Hml.Parser.Lexing
             return result.ToArray();
         }
 
-        private StreamReader reader;
-
-        private int position, line, column;
-
+        /// <summary>
+        /// Tokenize the specified stream by processing each found token.
+        /// </summary>
+        /// <returns>The tokenize.</returns>
+        /// <param name="stream">Stream.</param>
+        /// <param name="onToken">On token.</param>
         public void Tokenize(Stream stream, Action<HmlToken> onToken)
         {
             this.position = 0;
             this.line = 0;
             this.column = 0;
 
-            using(this.reader = new StreamReader(stream))
+            using (this.reader = new StreamReader(stream))
             {
                 HmlToken token = null;
 
@@ -58,7 +87,7 @@ namespace Hml.Parser.Lexing
             }
         }
 
-        private char? Read() 
+        private char? Read()
         {
             if (reader.EndOfStream)
                 return null;
@@ -73,7 +102,7 @@ namespace Hml.Parser.Lexing
         private void SkipWhitespaces()
         {
             char? c;
-            while((c = this.Peek()) == ' ')
+            while ((c = this.Peek()) == ' ')
             {
                 this.Read();
             }
@@ -86,9 +115,9 @@ namespace Hml.Parser.Lexing
 
             var currentOrEnd = this.Read();
 
-            if(currentOrEnd == null)
+            if (currentOrEnd == null)
             {
-                return new HmlToken(HmlTokenType.EndOfDocument,this.line, this.column, start, start, null);
+                return new HmlToken(HmlTokenType.EndOfDocument, this.line, this.column, start, start, null);
             }
 
             HmlTokenType type;
@@ -108,7 +137,7 @@ namespace Hml.Parser.Lexing
                     while ((next = this.Peek()) != null && (
                         char.IsLetter(next ?? '0') ||
                           char.IsDigit(next ?? 'A') ||
-                          next == '.' || 
+                          next == '.' ||
                           next == '-' ||
                           next == '_'))
                     {
@@ -136,19 +165,19 @@ namespace Hml.Parser.Lexing
                     this.column = 0;
                     break;
                 case '=':
-                    type =  HmlTokenType.Equals;
+                    type = HmlTokenType.Equals;
                     break;
                 case '"':
-                    type =  HmlTokenType.PropertyValue;
+                    type = HmlTokenType.PropertyValue;
                     var builder = new StringBuilder();
-                    while((currentOrEnd = this.Read()) != null && currentOrEnd != '"')
+                    while ((currentOrEnd = this.Read()) != null && currentOrEnd != '"')
                     {
                         // Escape "
-                        if(currentOrEnd == '\\' && (next = this.Peek()) == '"')
+                        if (currentOrEnd == '\\' && (next = this.Peek()) == '"')
                         {
                             currentOrEnd = this.Read();
                         }
-                        
+
                         builder.Append(currentOrEnd);
                     }
                     content = builder.ToString();
@@ -181,5 +210,7 @@ namespace Hml.Parser.Lexing
 
             return new HmlToken(type, this.line, column, start, end - start, content);
         }
+
+        #endregion
     }
 }

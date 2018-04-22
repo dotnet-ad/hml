@@ -6,5 +6,6 @@
 
   <ItemGroup>
     <Folder Include="Lexing\" />
+    <Folder Include="Exceptions\" />
   </ItemGroup>
 </Project>

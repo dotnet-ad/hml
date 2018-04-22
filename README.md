@@ -15,12 +15,90 @@ node(property="value", other="another value"): this is the content
 ```
 
 ```csharp
-var node = HmlParser.Default.Parse(hmlContent);
+var node = HmlParser.Default.Parse(hmlContent).Root;
 var other = node["other"]; //another value
 var child = node.First(); 
 var text = child.Text; //content of the child
-
 ```
+
+## Usage
+
+### Writing a document
+
+An `hml` document should be structured following those rules :
+
+* A unique root node
+* One node per line
+* A node must have a name
+* A node can have properties
+* A node property must have a key and a string value.
+* A node can have text content
+* The parent of a node is the first node in the tree that has an indentation level lower than the current node (except for the first one in the document which the root node)
+
+### Parser
+
+The parser will load an `hml` content as an `HmlDocument`, which is  a tree of `HmlNode`.
+
+###### Loading a document from a string
+
+```csharp
+var hml = "node(property=\"value\"): sample\n child: test";
+var document = HmlParser.Default.Parse(hml);
+```
+
+###### Accessing nodes
+
+```csharp
+HmlNode node = document.Root;
+HmlNode child = node[0];
+```
+
+###### Accessing properties
+
+```csharp
+string value = node["property"];
+```
+
+###### Accessing text
+
+```csharp
+string text = node.Text;
+```
+
+### Lexer
+
+The lexer splits a document into tokens. You shouldn't use the lexer until you want to analyze the document structure more precisely (*for example for pretty printing an hml document*).
+
+###### Loading tokens
+
+```csharp
+var hml = "node(property=\"value\")";
+HmlToken[] tokens = HmlLexer.Default.Tokenize(hmlContent);
+```
+
+###### Accessing tokens
+
+```csharp
+var nodeName = tokens[0];
+var startProperties = tokens[1];
+var propertyName = tokens[2];
+var equals = tokens[3];
+var propertyValue = tokens[4];
+var endProperties = tokens[5];
+```
+
+###### Accessing token data
+
+```csharp
+var type = nodeName.Type; // HmlTokenType.Identifier
+var content = nodeName.Content; // "node"
+var line = nodeName.Position.Line; // 0
+var column = nodeName.Position.Column; // 0
+```
+
+### Parsing exceptions
+
+In case of a parsing error an `HmlParsingException` that will contains token information (*position in content, expected token, ...*).
 
 ## Specification
 
